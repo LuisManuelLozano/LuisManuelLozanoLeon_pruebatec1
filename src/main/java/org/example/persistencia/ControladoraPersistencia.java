@@ -29,9 +29,9 @@ public class ControladoraPersistencia {
 
     public ArrayList<Empleado> traerEmpleados() {
         //recibimos una lista de .findEmpleadoEntities y lo pasamos a un ArrayList llamado lista.
-       List<Empleado> lista = empleadoJPA.findEmpleadoEntities();
-       ArrayList<Empleado> listaEmpleados = new ArrayList<Empleado>(lista);
-      return listaEmpleados;
+        List<Empleado> lista = empleadoJPA.findEmpleadoEntities();
+        ArrayList<Empleado> listaEmpleados = new ArrayList<Empleado>(lista);
+        return listaEmpleados;
     }
 
 
@@ -39,10 +39,24 @@ public class ControladoraPersistencia {
         try {
             empleadoJPA.edit(empleado);
         } catch (Exception ex) {
-            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);        }
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Empleado traerEmpleado(Long id) {
-       return empleadoJPA.findEmpleado(id);
+        return empleadoJPA.findEmpleado(id);
     }
+
+    public Empleado buscarEmpleadoPorNombreYApellido(String nombre, String apellido) {
+        List<Empleado> listaEmpleados = traerEmpleados();
+        for (Empleado emp : listaEmpleados) {
+            if (emp.getNombre().equalsIgnoreCase(nombre) && emp.getApellido().equalsIgnoreCase(apellido)) {
+                return emp;
+            }
+        }
+        return null;
+    }
+
 }
+
+

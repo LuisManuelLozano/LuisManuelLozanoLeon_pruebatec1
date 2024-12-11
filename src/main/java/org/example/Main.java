@@ -33,28 +33,36 @@ public class Main {
                     switch (menu) {
                         case 1:
                             // Crear un empleado.
-                            boolean bnombre = false;
-                            String nombreC ="";
-                            while (!bnombre) {
-                                System.out.println("Introduzca el nombre: ");
-                                nombreC = scanner.nextLine();
-                                if (!nombreC.isEmpty()) {
-                                    bnombre = true;
-                                } else {
-                                    out.println("el campo nombre está vacío");
+                            boolean empDuplicado = true;
+                            while (empDuplicado) {
+                                boolean bnombre = false;
+                                String nombreC = "";
+                                while (!bnombre) {
+                                    System.out.println("Introduzca el nombre: ");
+                                    nombreC = scanner.nextLine();
+                                    if (!nombreC.isEmpty()) {
+                                        bnombre = true;
+                                    } else {
+                                        out.println("el campo nombre está vacío");
+                                    }
                                 }
-                            }
-                            boolean bapellido = false;
-                            String apellidoC ="";
-                            while (!bapellido) {
-                                System.out.println("Introduzca el apellido: ");
-                                apellidoC = scanner.nextLine();
-                                if(!apellidoC.isEmpty()){
-                                    bapellido = true;
-                                }else{
-                                    out.println("el campo apellido está vacío");
+                                boolean bapellido = false;
+                                String apellidoC = "";
+                                while (!bapellido) {
+                                    System.out.println("Introduzca el apellido: ");
+                                    apellidoC = scanner.nextLine();
+                                    if (!apellidoC.isEmpty()) {
+                                        bapellido = true;
+                                    } else {
+                                        out.println("el campo apellido está vacío");
+                                    }
                                 }
-                            }
+                                // Aquí filtramos si se está tratando de meter un empleado duplicado con igual nombre y apellidos
+                                if (control.buscarEmpleadoPorNombreYApellido(nombreC, apellidoC) != null) {
+                                    out.println("El empleado con el nombre y apellido especificados ya existe. Por favor, introduzca datos diferentes.");
+                                } else{
+                            empDuplicado = false;
+
                             boolean bcargo = false;
                             String cargoC ="";
                             while (!bcargo) {
@@ -92,7 +100,7 @@ public class Main {
                                 Date fechaC;
                                 try {
                                     fechaC = sdfC.parse(fechaComoTexto);
-                                    Empleado empleado = new Empleado(1L,nombreC, apellidoC, cargoC, salarioC, fechaC);
+                                    Empleado empleado = new Empleado(1L, nombreC, apellidoC, cargoC, salarioC, fechaC);
                                     control.crearEmpleado(empleado);
                                     out.println("empleado creado exitosamente (Intro para continuar)");
                                     scanner.nextLine();
@@ -103,6 +111,8 @@ public class Main {
                                     out.printf("formato de fecha inválido");
                                     scanner.nextLine();
                                 }
+                               }
+                             }
                             }
                             break;
                         case 2:
@@ -208,8 +218,8 @@ public class Main {
                                             case 3:
                                                 boolean banderaCed = false;
                                                 out.println("introduzca el nuevo cargo del empleado: ");
-                                                String nuevoCargo = scanner.nextLine();
                                                 while (!banderaCed){
+                                                    String nuevoCargo = scanner.nextLine();
                                                     if (nuevoCargo.isEmpty()){
                                                         out.println("El cargo está vacío. Debe introducir otro.");
                                                     }else {
@@ -233,12 +243,13 @@ public class Main {
                                                         salarioVal = true;
                                                     } catch (InputMismatchException e) {
                                                         out.printf("el salario introducido debe ser numérico");
+                                                        scanner.nextLine();
                                                     }
                                                 }
                                                 break;
 
                                             case 5:
-                                                Boolean banderaF = false;
+                                                boolean banderaF = false;
                                                 while(!banderaF) {
                                                     out.println("introduzca la nueva fecha de inicio del empleado: (formato: yyyy/mm/dd) ");
                                                     String fechaT = scanner.nextLine();
@@ -258,6 +269,7 @@ public class Main {
                                                 break;
                                             default:
                                                 out.println("edición no realizada");
+                                                break;
                                         }
                                         out.println("el empleado actualizado ha quedado así: " + empleado.toString());
                                         out.println("si ha concluido la edición de este operario pulse 0, si desea seguir editándolo pulse cualquier número ");
